@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Art games - Fififox</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                text-align: center;
+                background-color: #272822;
+            }
+            #title {
+                font-size: 2em;
+            }
+            #help, a {
+                color: #75715E;
+            }
+            #word {
+                font-size: 10em;
+            }
+            #word.color1 {
+                color: #66D9EF;
+            }
+            #word.color2 {
+                color: #AE81FF;
+            }
+            #title, #word.winning {
+                color: #E6DB74;
+            }
+            #word.losing {
+                color: #F92672;
+            }
+            #score {
+                color: #FD971F;
+                font-size: 4em;
+            }
+        </style>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js">
+        </script>
+        <script>
+            $(document).ready(function() {
+                var word = $("#word");
+                var score = $("#score");
+                var length = 1000;
+                $(document).keypress(function(event) {
+                    if (event.which == 32) {
+                        event.preventDefault();
+                        var c = word.text();
+                        if (c == "art" || c == "game" || c == "games") {
+                            word.addClass("winning");
+                            length /= 1.1;
+                            score.text(parseInt(score.text()) + Math.round(10000 / length));
+                        } else {
+                            word.addClass("losing");
+                            score.text(parseInt(score.text()) - Math.round(10000 / length));
+                        }
+                    }
+                });
+                var words = "An art game or arthouse game or less commonly auteur game is a work of interactive new media digital software art as well as a member of the art game subgenre of the serious video game The term art game was first used academically in 2002 and it has come to be understood as describing a video game designed to emphasize art or whose structure is intended to produce some kind of reaction in its audience Art games are interactive usually competitive against the computer self or other players and they are the result of artistic intent by the party offering the piece for consideration They also typically go out of their way to have a unique, unconventional look, often standing out for aesthetic beauty or complexity in design The concept has been extended by some art theorists to the realm of modified modded gaming when modifications have been made to existing non-art-games to produce graphic results intended to be viewed as an artistic display as opposed to modifications intended to change game play scenarios or for storytelling Modified games created for artistic purposes are sometimes referred to as video game art Art games are often considered a means of demonstrating video games as works of art";
+                words = words.split(" ");
+                var index = 0;
+                var next = (function() {
+                    word.animate({ opacity: 0 }, length, function() {
+                        word.text(words[index = (index + 1) % words.length]);
+                        word.toggleClass("color1 color2");
+                        word.removeClass("winning losing");
+                        word.animate({ opacity: 1 }, length, next);
+                    });
+                });
+                word.text(words[index]);
+                next();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="title">Art games</div>
+        <div id="help">
+            Press SPACE when the words ART and GAME appears below.<br>
+            Content quoted from <a href="http://en.wikipedia.org/wiki/Art_game">Wikipedia</a>.
+        </div>
+        <div id="word" class="color1"></div>
+        <div id="score">0</div>
+    </body>
+</html>
